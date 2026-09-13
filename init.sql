@@ -147,3 +147,18 @@ VALUES
     (2, 1, 'Fall 2026', 'Enrolled'),
     (3, 2, 'Fall 2026', 'Enrolled'),
     (4, 3, 'Fall 2026', 'Enrolled');
+--Shows students with GPA >= 3.0 along with their home department.
+CREATE OR ALTER VIEW v_Top_Students AS
+SELECT
+    s.StudentID,
+    s.FirstName,
+    s.LastName,
+    s.Email,
+    s.GPA,
+    d.DepartmentName AS Department
+FROM Students AS s
+INNER JOIN Departments AS d
+    ON s.DepartmentID = d.DepartmentID
+WHERE s.GPA >= 3.00;
+
+-- SELECT * FROM v_Top_Students ORDER BY GPA DESC;
