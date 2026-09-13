@@ -79,3 +79,10 @@ VALUES
   ('Computer Science', 'Main Hall', 100000.00),
   ('Mathematics', 'Second Hall', 300000.00),
   ('Physics', 'Third Hall', 350000.00);
+
+
+  INSERT INTO Students (FirstName, LastName, Email, GPA, DepartmentID) VALUES
+    ('Ana',    'Kapanadze', 'ana.kapanadze@example.edu',   3.8, 1),
+    ('Giorgi', 'Beridze',   'giorgi.beridze@example.edu',  2.6, 1),
+    ('Mariam', 'Lomidze',   'mariam.lomidze@example.edu',  3.4, 2),
+    ('Levan',  'Tsiklauri', 'levan.tsiklauri@example.edu',  3.1, 3);
