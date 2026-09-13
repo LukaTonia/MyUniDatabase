@@ -65,7 +65,17 @@ CREATE TABLE
     ChangeDate DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME ()
   );
 
-CREATE INDEX IX_Students_DepartmentID   ON Students(DepartmentID);
-CREATE INDEX IX_Courses_DepartmentID    ON Courses(DepartmentID);
-CREATE INDEX IX_Enrollments_StudentID   ON Enrollments(StudentID);
-CREATE INDEX IX_Enrollments_CourseID    ON Enrollments(CourseID);
+CREATE INDEX IX_Students_DepartmentID ON Students (DepartmentID);
+
+CREATE INDEX IX_Courses_DepartmentID ON Courses (DepartmentID);
+
+CREATE INDEX IX_Enrollments_StudentID ON Enrollments (StudentID);
+
+CREATE INDEX IX_Enrollments_CourseID ON Enrollments (CourseID);
+
+INSERT INTO
+  Departments (DepartmentName, Building, Budget)
+VALUES
+  ('Computer Science', 'Main Hall', 100000.00),
+  ('Mathematics', 'Second Hall', 300000.00),
+  ('Physics', 'Third Hall', 350000.00);
