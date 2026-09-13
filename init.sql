@@ -25,3 +25,14 @@ CREATE TABLE
     DepartmentID INT NOT NULL,
     CONSTRAINT FK_Students_Departments FOREIGN KEY (DepartmentID) REFERENCES Departments (DepartmentID) ON UPDATE CASCADE ON DELETE NO ACTION
   );
+
+CREATE TABLE
+  Courses (
+    CourseID INT IDENTITY (1, 1) PRIMARY KEY,
+    CourseCode NVARCHAR (20) NOT NULL UNIQUE,
+    CourseName NVARCHAR (150) NOT NULL,
+    Credits TINYINT NOT NULL CHECK (Credits BETWEEN 1 AND 6),
+    InstructorName NVARCHAR (100) NULL,
+    DepartmentID INT NOT NULL,
+    CONSTRAINT FK_Courses_Departments FOREIGN KEY (DepartmentID) REFERENCES Departments (DepartmentID) ON UPDATE CASCADE ON DELETE NO ACTION
+  );
