@@ -37,22 +37,30 @@ CREATE TABLE
     CONSTRAINT FK_Courses_Departments FOREIGN KEY (DepartmentID) REFERENCES Departments (DepartmentID) ON UPDATE CASCADE ON DELETE NO ACTION
   );
 
-  CREATE TABLE Enrollments (
-    EnrollmentID    INT IDENTITY(1,1) PRIMARY KEY,
-    StudentID       INT             NOT NULL,
-    CourseID        INT             NOT NULL,
-    Semester        NVARCHAR(20)    NOT NULL,       
-    Status          NVARCHAR(20)    NOT NULL
-                       CONSTRAINT DF_Enrollments_Status DEFAULT 'Enrolled'
-                       CHECK (Status IN ('Enrolled','Completed','Dropped','Withdrawn')),
-    Grade           NVARCHAR(2)     NULL,           
-    EnrollmentDate  DATETIME2       NOT NULL DEFAULT SYSUTCDATETIME(),
-    CONSTRAINT FK_Enrollments_Students
-        FOREIGN KEY (StudentID) REFERENCES Students(StudentID)
-        ON DELETE CASCADE,
-    CONSTRAINT FK_Enrollments_Courses
-        FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
-        ON DELETE CASCADE,
-    CONSTRAINT UQ_Enrollments_StudentCourseSemester
-        UNIQUE (StudentID, CourseID, Semester)
-);
+CREATE TABLE
+  Enrollments (
+    EnrollmentID INT IDENTITY (1, 1) PRIMARY KEY,
+    StudentID INT NOT NULL,
+    CourseID INT NOT NULL,
+    Semester NVARCHAR (20) NOT NULL,
+    Status NVARCHAR (20) NOT NULL CONSTRAINT DF_Enrollments_Status DEFAULT 'Enrolled' CHECK (
+      Status IN ('Enrolled', 'Completed', 'Dropped', 'Withdrawn')
+    ),
+    Grade NVARCHAR (2) NULL,
+    EnrollmentDate DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME (),
+    CONSTRAINT FK_Enrollments_Students FOREIGN KEY (StudentID) REFERENCES Students (StudentID) ON DELETE CASCADE,
+    CONSTRAINT FK_Enrollments_Courses FOREIGN KEY (CourseID) REFERENCES Courses (CourseID) ON DELETE CASCADE,
+    CONSTRAINT UQ_Enrollments_StudentCourseSemester UNIQUE (StudentID, CourseID, Semester)
+  );
+
+CREATE TABLE
+  Audit_Logs (
+    LogID INT IDENTITY (1, 1) PRIMARY KEY,
+    TableName NVARCHAR (50) NOT NULL,
+    RecordID INT NOT NULL,
+    Action NVARCHAR (20) NOT NULL,
+    OldValue NVARCHAR (100) NULL,
+    NewValue NVARCHAR (100) NULL,
+    ChangedBy NVARCHAR (128) NOT NULL DEFAULT SUSER_SNAME (),
+    ChangeDate DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME ()
+  );
