@@ -80,9 +80,66 @@ VALUES
   ('Mathematics', 'Second Hall', 300000.00),
   ('Physics', 'Third Hall', 350000.00);
 
+INSERT INTO
+  Students (FirstName, LastName, Email, GPA, DepartmentID)
+VALUES
+  (
+    'Ana',
+    'Kapanadze',
+    'ana.kapanadze@example.edu',
+    3.8,
+    1
+  ),
+  (
+    'Giorgi',
+    'Beridze',
+    'giorgi.beridze@example.edu',
+    2.6,
+    1
+  ),
+  (
+    'Mariam',
+    'Lomidze',
+    'mariam.lomidze@example.edu',
+    3.4,
+    2
+  ),
+  (
+    'Levan',
+    'Tsiklauri',
+    'levan.tsiklauri@example.edu',
+    3.1,
+    3
+  );
 
-  INSERT INTO Students (FirstName, LastName, Email, GPA, DepartmentID) VALUES
-    ('Ana',    'Kapanadze', 'ana.kapanadze@example.edu',   3.8, 1),
-    ('Giorgi', 'Beridze',   'giorgi.beridze@example.edu',  2.6, 1),
-    ('Mariam', 'Lomidze',   'mariam.lomidze@example.edu',  3.4, 2),
-    ('Levan',  'Tsiklauri', 'levan.tsiklauri@example.edu',  3.1, 3);
+INSERT INTO
+  Courses (
+    CourseCode,
+    CourseName,
+    Credits,
+    InstructorName,
+    DepartmentID
+  )
+VALUES
+  (
+    'CS101',
+    'Intro to Programming',
+    3,
+    'Dr. Kakashvili',
+    1
+  ),
+  (
+    'MA201',
+    'Linear Algebra',
+    4,
+    'Dr. Nanobashvili',
+    2
+  ),
+  (
+    'PH150',
+    'Classical Mechanics',
+    3,
+    'Dr. Janelidze',
+    3
+  );
+  
