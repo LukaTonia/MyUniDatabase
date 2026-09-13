@@ -162,3 +162,28 @@ INNER JOIN Departments AS d
 WHERE s.GPA >= 3.00;
 
 -- SELECT * FROM v_Top_Students ORDER BY GPA DESC;
+--trigger for status changes
+CREATE OR ALTER TRIGGER trg_Enrollment_StatusChange
+ON Enrollments
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+ 
+    
+    IF UPDATE(Status)
+    BEGIN
+        INSERT INTO Audit_Logs (TableName, RecordID, Action, OldValue, NewValue, ChangedBy)
+        SELECT
+            'Enrollments',
+            i.EnrollmentID,
+            'STATUS_UPDATE',
+            d.Status,
+            i.Status,
+            SUSER_SNAME()
+        FROM inserted AS i
+        INNER JOIN deleted AS d
+            ON i.EnrollmentID = d.EnrollmentID
+        WHERE i.Status <> d.Status;  
+    END
+END;
