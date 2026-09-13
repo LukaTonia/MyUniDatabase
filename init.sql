@@ -64,3 +64,8 @@ CREATE TABLE
     ChangedBy NVARCHAR (128) NOT NULL DEFAULT SUSER_SNAME (),
     ChangeDate DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME ()
   );
+
+CREATE INDEX IX_Students_DepartmentID   ON Students(DepartmentID);
+CREATE INDEX IX_Courses_DepartmentID    ON Courses(DepartmentID);
+CREATE INDEX IX_Enrollments_StudentID   ON Enrollments(StudentID);
+CREATE INDEX IX_Enrollments_CourseID    ON Enrollments(CourseID);
