@@ -1,9 +1,27 @@
 CREATE DATABASE UniversityRecordsDB;
+
 USE UniversityRecordsDB;
-CREATE TABLE Departments (
-    DepartmentID    INT IDENTITY(1,1) PRIMARY KEY,
-    DepartmentName  NVARCHAR(100)   NOT NULL UNIQUE,
-    Building        NVARCHAR(50)    NULL,
-    Budget          DECIMAL(14,2)   NOT NULL DEFAULT 0,
-    CreatedAt       DATETIME2       NOT NULL DEFAULT SYSUTCDATETIME()
-);
+
+CREATE TABLE
+  Departments (
+    DepartmentID INT IDENTITY (1, 1) PRIMARY KEY,
+    DepartmentName NVARCHAR (100) NOT NULL UNIQUE,
+    Building NVARCHAR (50) NULL,
+    Budget DECIMAL(14, 2) NOT NULL DEFAULT 0,
+    CreatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME ()
+  );
+
+CREATE TABLE
+  Students (
+    StudentID INT IDENTITY (1, 1) PRIMARY KEY,
+    FirstName NVARCHAR (50) NOT NULL,
+    LastName NVARCHAR (50) NOT NULL,
+    Email NVARCHAR (150) NOT NULL UNIQUE,
+    EnrollmentDate DATE NOT NULL DEFAULT CAST(GETDATE () AS DATE),
+    GPA DECIMAL(3, 2) NOT NULL DEFAULT 0.00 CHECK (
+      GPA >= 0.00
+      AND GPA <= 4.00
+    ),
+    DepartmentID INT NOT NULL,
+    CONSTRAINT FK_Students_Departments FOREIGN KEY (DepartmentID) REFERENCES Departments (DepartmentID) ON UPDATE CASCADE ON DELETE NO ACTION
+  );
