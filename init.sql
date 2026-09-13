@@ -142,48 +142,67 @@ VALUES
     'Dr. Janelidze',
     3
   );
-  INSERT INTO Enrollments (StudentID, CourseID, Semester, Status) VALUES
-    (1, 1, 'Fall 2026', 'Enrolled'),
-    (2, 1, 'Fall 2026', 'Enrolled'),
-    (3, 2, 'Fall 2026', 'Enrolled'),
-    (4, 3, 'Fall 2026', 'Enrolled');
+
+INSERT INTO
+  Enrollments (StudentID, CourseID, Semester, Status)
+VALUES
+  (1, 1, 'Fall 2026', 'Enrolled'),
+  (2, 1, 'Fall 2026', 'Enrolled'),
+  (3, 2, 'Fall 2026', 'Enrolled'),
+  (4, 3, 'Fall 2026', 'Enrolled');
+
 --Shows students with GPA >= 3.0 along with their home department.
-CREATE OR ALTER VIEW v_Top_Students AS
+CREATE
+OR
+ALTER VIEW v_Top_Students AS
 SELECT
-    s.StudentID,
-    s.FirstName,
-    s.LastName,
-    s.Email,
-    s.GPA,
-    d.DepartmentName AS Department
-FROM Students AS s
-INNER JOIN Departments AS d
-    ON s.DepartmentID = d.DepartmentID
-WHERE s.GPA >= 3.00;
+  s.StudentID,
+  s.FirstName,
+  s.LastName,
+  s.Email,
+  s.GPA,
+  d.DepartmentName AS Department
+FROM
+  Students AS s
+  INNER JOIN Departments AS d ON s.DepartmentID = d.DepartmentID
+WHERE
+  s.GPA >= 3.00;
 
 -- SELECT * FROM v_Top_Students ORDER BY GPA DESC;
 --trigger for status changes
-CREATE OR ALTER TRIGGER trg_Enrollment_StatusChange
-ON Enrollments
-AFTER UPDATE
-AS
-BEGIN
-    SET NOCOUNT ON;
- 
-    
-    IF UPDATE(Status)
-    BEGIN
-        INSERT INTO Audit_Logs (TableName, RecordID, Action, OldValue, NewValue, ChangedBy)
-        SELECT
-            'Enrollments',
-            i.EnrollmentID,
-            'STATUS_UPDATE',
-            d.Status,
-            i.Status,
-            SUSER_SNAME()
-        FROM inserted AS i
-        INNER JOIN deleted AS d
-            ON i.EnrollmentID = d.EnrollmentID
-        WHERE i.Status <> d.Status;  
-    END
-END;
+CREATE
+OR
+ALTER TRIGGER trg_Enrollment_StatusChange ON Enrollments AFTER
+UPDATE AS BEGIN
+SET
+  NOCOUNT ON;
+
+IF
+UPDATE (Status) BEGIN
+INSERT INTO
+  Audit_Logs (
+    TableName,
+    RecordID,
+    Action,
+    OldValue,
+    NewValue,
+    ChangedBy
+  )
+SELECT
+  'Enrollments',
+  i.EnrollmentID,
+  'STATUS_UPDATE',
+  d.Status,
+  i.Status,
+  SUSER_SNAME ()
+FROM
+  inserted AS i
+  INNER JOIN deleted AS d ON i.EnrollmentID = d.EnrollmentID
+WHERE
+  i.Status <> d.Status;
+
+END END;
+
+CREATE ROLE db_admin;
+
+ALTER ROLE db_owner ADD MEMBER db_admin;
