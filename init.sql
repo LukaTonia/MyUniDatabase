@@ -142,4 +142,8 @@ VALUES
     'Dr. Janelidze',
     3
   );
-  
+  INSERT INTO Enrollments (StudentID, CourseID, Semester, Status) VALUES
+    (1, 1, 'Fall 2026', 'Enrolled'),
+    (2, 1, 'Fall 2026', 'Enrolled'),
+    (3, 2, 'Fall 2026', 'Enrolled'),
+    (4, 3, 'Fall 2026', 'Enrolled');
