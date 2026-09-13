@@ -206,3 +206,13 @@ END END;
 CREATE ROLE db_admin;
 
 ALTER ROLE db_owner ADD MEMBER db_admin;
+
+CREATE ROLE committee_reviewer;
+
+GRANT
+SELECT
+  ON dbo.Students TO committee_reviewer;
+
+GRANT
+SELECT
+  ON dbo.Enrollments TO committee_reviewer
