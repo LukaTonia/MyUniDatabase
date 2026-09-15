@@ -215,4 +215,7 @@ SELECT
 
 GRANT
 SELECT
-  ON dbo.Enrollments TO committee_reviewer
+  ON dbo.Enrollments TO committee_reviewer;
+
+DENY INSERT, UPDATE, DELETE ON dbo.Students TO committee_reviewer;
+DENY INSERT, UPDATE, DELETE ON dbo.Enrollments TO committee_reviewer;
