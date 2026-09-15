@@ -217,5 +217,23 @@ GRANT
 SELECT
   ON dbo.Enrollments TO committee_reviewer;
 
-DENY INSERT, UPDATE, DELETE ON dbo.Students TO committee_reviewer;
-DENY INSERT, UPDATE, DELETE ON dbo.Enrollments TO committee_reviewer;
+DENY INSERT,
+UPDATE,
+DELETE ON dbo.Students TO committee_reviewer;
+
+DENY INSERT,
+UPDATE,
+DELETE ON dbo.Enrollments TO committee_reviewer;
+
+CREATE TABLE
+  ErrorLog (
+    ErrorLogID INT IDENTITY (1, 1) PRIMARY KEY,
+    ErrorNumber INT NULL,
+    ErrorSeverity INT NULL,
+    ErrorState INT NULL,
+    ErrorProcedure NVARCHAR (200) NULL,
+    ErrorLine INT NULL,
+    ErrorMessage NVARCHAR (4000) NULL,
+    ErrorDateTime DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME (),
+    LoggedBy NVARCHAR (128) NOT NULL DEFAULT SUSER_SNAME ()
+  );
