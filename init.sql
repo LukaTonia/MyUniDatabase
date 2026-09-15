@@ -237,3 +237,36 @@ CREATE TABLE
     ErrorDateTime DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME (),
     LoggedBy NVARCHAR (128) NOT NULL DEFAULT SUSER_SNAME ()
   );
+
+CREATE
+OR
+ALTER TRIGGER trg_Students_GPAChange ON Students AFTER
+UPDATE AS BEGIN
+SET
+  NOCOUNT ON;
+
+IF
+UPDATE (GPA) BEGIN
+INSERT INTO
+  Audit_Logs (
+    TableName,
+    RecordID,
+    Action,
+    OldValue,
+    NewValue,
+    ChangedBy
+  )
+SELECT
+  'Students',
+  i.StudentID,
+  'GPA_UPDATE',
+  CAST(d.GPA AS NVARCHAR (10)),
+  CAST(i.GPA AS NVARCHAR (10)),
+  SUSER_SNAME ()
+FROM
+  inserted AS i
+  INNER JOIN deleted AS d ON i.StudentID = d.StudentID
+WHERE
+  i.GPA <> d.GPA;
+
+END END;
