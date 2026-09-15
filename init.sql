@@ -270,3 +270,20 @@ WHERE
   i.GPA <> d.GPA;
 
 END END;
+
+--full database backup 
+CREATE OR ALTER PROCEDURE usp_BackupDatabaseFull
+    @BackupDirectory NVARCHAR(260) = N'C:\SQLBackups\'
+AS
+BEGIN
+    SET NOCOUNT ON;
+ 
+    DECLARE @FileName NVARCHAR(300);
+    SET @FileName = @BackupDirectory + N'UniversityRecordsDB_Full_'
+                  + FORMAT(GETDATE(), 'yyyyMMdd_HHmmss') + N'.bak';
+ 
+    BACKUP DATABASE UniversityRecordsDB
+    TO DISK = @FileName
+    WITH INIT, COMPRESSION, CHECKSUM,
+         NAME = N'UniversityRecordsDB-Full Backup';
+END;
