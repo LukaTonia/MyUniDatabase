@@ -216,4 +216,75 @@ SELECT
 
 GRANT
 SELECT
-  ON dbo.Enrollments TO committee_reviewer
+  ON dbo.Enrollments TO committee_reviewer;
+
+DENY INSERT,
+UPDATE,
+DELETE ON dbo.Students TO committee_reviewer;
+
+DENY INSERT,
+UPDATE,
+DELETE ON dbo.Enrollments TO committee_reviewer;
+
+CREATE TABLE
+  ErrorLog (
+    ErrorLogID INT IDENTITY (1, 1) PRIMARY KEY,
+    ErrorNumber INT NULL,
+    ErrorSeverity INT NULL,
+    ErrorState INT NULL,
+    ErrorProcedure NVARCHAR (200) NULL,
+    ErrorLine INT NULL,
+    ErrorMessage NVARCHAR (4000) NULL,
+    ErrorDateTime DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME (),
+    LoggedBy NVARCHAR (128) NOT NULL DEFAULT SUSER_SNAME ()
+  );
+
+CREATE
+OR
+ALTER TRIGGER trg_Students_GPAChange ON Students AFTER
+UPDATE AS BEGIN
+SET
+  NOCOUNT ON;
+
+IF
+UPDATE (GPA) BEGIN
+INSERT INTO
+  Audit_Logs (
+    TableName,
+    RecordID,
+    Action,
+    OldValue,
+    NewValue,
+    ChangedBy
+  )
+SELECT
+  'Students',
+  i.StudentID,
+  'GPA_UPDATE',
+  CAST(d.GPA AS NVARCHAR (10)),
+  CAST(i.GPA AS NVARCHAR (10)),
+  SUSER_SNAME ()
+FROM
+  inserted AS i
+  INNER JOIN deleted AS d ON i.StudentID = d.StudentID
+WHERE
+  i.GPA <> d.GPA;
+
+END END;
+
+--full database backup 
+CREATE OR ALTER PROCEDURE usp_BackupDatabaseFull
+    @BackupDirectory NVARCHAR(260) = N'C:\SQLBackups\'
+AS
+BEGIN
+    SET NOCOUNT ON;
+ 
+    DECLARE @FileName NVARCHAR(300);
+    SET @FileName = @BackupDirectory + N'UniversityRecordsDB_Full_'
+                  + FORMAT(GETDATE(), 'yyyyMMdd_HHmmss') + N'.bak';
+ 
+    BACKUP DATABASE UniversityRecordsDB
+    TO DISK = @FileName
+    WITH INIT, COMPRESSION, CHECKSUM,
+         NAME = N'UniversityRecordsDB-Full Backup';
+END;
