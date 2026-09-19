@@ -143,6 +143,7 @@ VALUES
     3
   );
 
+--Insert into enrollemnts table
 INSERT INTO
   Enrollments (StudentID, CourseID, Semester, Status)
 VALUES
